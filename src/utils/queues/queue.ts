@@ -37,7 +37,6 @@ export class Queue<T> {
         }
 
         const item = this.queue[this.head];
-        this.queue[this.head] = undefined;
         this.queueSize -= 1;
 
         if (this.head === this.sizeMax - 1) {
