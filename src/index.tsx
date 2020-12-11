@@ -1,4 +1,6 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
 
-ReactDOM.render(<div>Vitessce Prototype Research</div>, document.getElementById('main'));
+import { App } from './app';
+
+ReactDOM.render(<App />, document.getElementById('main'));
