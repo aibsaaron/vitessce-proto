@@ -8,6 +8,8 @@
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
+        "strictNullChecks": true,
+        "strict": true,
         "noUnusedLocals": true,
         "module": "esnext",
         "moduleResolution": "node",

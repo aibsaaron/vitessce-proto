@@ -1,18 +1,20 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable import/no-extraneous-dependencies */
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 
-// call dotenv and it will return an Object with a parsed key 
+// call dotenv and it will return an Object with a parsed key
 const env = dotenv.config().parsed || {};
 
 // Look for BKP_ environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack.
 const BKP_ENV = /BKP_/i;
 const bkpEnvs = Object.keys(process.env)
-    .filter(key => BKP_ENV.test(key))
+    .filter((key) => BKP_ENV.test(key))
     .reduce(
-        (env, key) => {
-            env[key] = process.env[key];
-            return env;
+        (bkpenv, key) => {
+            bkpenv[key] = process.env[key];
+            return bkpenv;
         }, {}
     );
 
