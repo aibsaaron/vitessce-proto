@@ -8,3 +8,4 @@ Visual Integration Tool for Exploration of Spatial Single-Cell Experiments
 ## Notes
 * No documentation on individual components.
 * Not written in TypeScript.
+* Individual component use is not straight forward.
