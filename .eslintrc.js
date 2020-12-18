@@ -12,6 +12,7 @@ module.exports = {
         describe: 'readonly',
         test: 'readonly',
         expect: 'readonly',
+        JSX: 'readonly',
     },
     parser: '@typescript-eslint/parser',
     parserOptions: {
