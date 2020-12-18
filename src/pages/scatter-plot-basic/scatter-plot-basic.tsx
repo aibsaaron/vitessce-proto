@@ -1,16 +1,39 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
-import { Status } from 'vitessce/dist/es/production/status';
 import { Scatterplot } from 'vitessce/dist/es/production/scatterplot';
 import 'vitessce/dist/es/production/static/css/index.css';
 import { PageRoute } from '../../types';
 import { fetchData, MockData } from './data';
 import { fnLog } from './fn-log';
+import { Info } from './info';
+
+const cellIsSelected = (arr: number[], target: number) => {
+    let i = 0;
+    let j = arr.length - 1;
+    let m = Math.floor((i + j) / 2);
+
+    while (i < j) {
+        if (arr[i] === target || arr[m] === target || arr[j] === target) {
+            return true;
+        }
+
+        if (target < arr[m]) {
+            j = m;
+        } else {
+            i = m + 1;
+        }
+
+        m = Math.floor((i + j) / 2);
+    }
+
+    return false;
+};
 
 export const ScatterPlotBasic: PageRoute = () => {
     const [data, setData] = useState<MockData | null>(null);
     const [cellSelection, setCellSelection] = useState<string[]>([]);
+    const [internalCellSelection, setInternalCellSelection] = useState<number[]>([]);
     const [cellHighlight, setCellHighlight] = useState<string>('');
     const mapping = 'PCA';
 
@@ -25,14 +48,22 @@ export const ScatterPlotBasic: PageRoute = () => {
         }
     }, [data]);
 
-    const m = 'TEST APP';
+    const appTitle = 'S C A T T E R . P L O T . B A S I C';
 
     const initialViewState = { target: [0, 0, 0], zoom: 3 };
     const [viewState, setViewState] = useState(initialViewState);
 
     const dimensions = { width: '400px', height: '400px', margin: '10px' };
 
-    if (!data || typeof setCellSelection === 'string') {
+    const computeCellSelection = (cells: string[]) => {
+        const internalCells = cells.map((cell) => Number(cell)).sort((a, b) => a - b);
+        setInternalCellSelection(internalCells);
+        setCellSelection(cells);
+    };
+
+    const getCellIsSelected = (id: number) => cellIsSelected(internalCellSelection, id);
+
+    if (!data) {
         return (
             <div>
                 Loading...
@@ -42,11 +73,11 @@ export const ScatterPlotBasic: PageRoute = () => {
 
     return (
         <div className="vitessce-container vitessce-theme-light">
-            <div>{m}</div>
+            <div>{appTitle}</div>
             <div className="card card-body bg-secondary" style={dimensions}>
-                <Status
-                    info={`Status info: ${cellHighlight}`}
-                    warn="Status warn"
+                <Info
+                    cellHighlight={cellHighlight}
+                    cellSelection={cellSelection}
                 />
             </div>
             <div className="card card-body bg-secondary" style={dimensions}>
@@ -82,19 +113,19 @@ export const ScatterPlotBasic: PageRoute = () => {
                 <Scatterplot
                     cellColors={null}
                     cellFilter={null}
-                    cellOpacity={1}
-                    cellRadiusScale={1}
+                    cellOpacity={0.8}
+                    cellRadiusScale={0.5}
                     cells={data?.cells}
                     cellSelection={cellSelection}
                     getCellColor={([id, d]: any) => data?.cellColors.get(id)}
                     getCellCoords={(d: any) => d.mappings[mapping]}
-                    getCellIsSelected={([id, d]: any) => cellSelection.includes(id)}
+                    getCellIsSelected={([id, d]: any) => getCellIsSelected(Number(id))}
                     mapping={mapping}
                     onCellClick={fnLog('onCellClick')}
                     setCellHighlight={setCellHighlight}
-                    setCellSelection={setCellSelection}
+                    setCellSelection={computeCellSelection}
                     setViewState={setViewState}
-                    theme="dark"
+                    theme="light"
                     uuid="my-vitessce-scatterplot"
                     viewState={viewState}
                 />

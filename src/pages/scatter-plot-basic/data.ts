@@ -11,13 +11,26 @@ export interface MockData {
     cellColors: CellColors;
 }
 
-const getColor = (i: number) => [
-    [200, 100, 100],
-    [200, 100, 200],
-    [100, 200, 200],
-][i % 3];
+const grouper = (a: number, b: number) => (x: number, y: number) => a * x + b * y;
 
-const k = 1000;
+const groupA = grouper(1, 1);
+const groupB = grouper(-2, 0);
+const groupC = grouper(2, -3);
+
+const getColor = (x: number, y: number) => {
+    const c = [
+        [120, 156, 74],
+        [130, 122, 163],
+        [249, 157, 32],
+    ];
+
+    const ind = [groupA(x, y), groupB(x, y), groupC(x, y)]
+        .reduce((maxInd, d, i, a) => (a[maxInd] > d ? maxInd : i), 0);
+
+    return c[ind];
+};
+
+const k = 300;
 const n = k * k;
 let mockData: MockData;
 
@@ -37,15 +50,17 @@ const generateMockData = async (mapping: string): Promise<MockData> => {
         const u = ((i - 1) % k) / k;
         const v = Math.floor((i - 1) / k) / k;
         const pos = (t: number) => (1 - t) * (-k) + (t) * k;
+        const x = pos(u);
+        const y = pos(v);
         const id = String(i);
         cells[id] = {
             mappings: {
-                [mapping]: [pos(u), pos(v)],
+                [mapping]: [x, y],
             },
         };
         cellColors.set(
             id,
-            getColor(i)
+            getColor(x, y)
         );
     }
 
