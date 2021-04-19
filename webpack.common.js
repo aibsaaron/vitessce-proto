@@ -56,7 +56,7 @@ module.exports = {
                 use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.ts(x?)$/,
+                test: /\.(t|j)s(x?)$/,
                 exclude: /node_modules/,
                 loader: 'ts-loader',
                 options: {

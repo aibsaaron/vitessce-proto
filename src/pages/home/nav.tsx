@@ -9,5 +9,8 @@ export const Nav = () => (
         <div>
             <Link to="/scatter-plot-basic">Scatter Plot Basic</Link>
         </div>
+        <div>
+            <Link to="/vitessce-app">Vitessce App</Link>
+        </div>
     </nav>
 );
